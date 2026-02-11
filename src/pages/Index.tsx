@@ -2,6 +2,7 @@ import { categories } from "@/data/categories";
 import CategoryCard from "@/components/CategoryCard";
 import TvClock from "@/components/TvClock";
 import { useFavorites } from "@/hooks/useFavorites";
+import { motion } from "framer-motion";
 import { Anchor, Star } from "lucide-react";
 
 const Index = () => {
@@ -18,7 +19,12 @@ const Index = () => {
       </div>
 
       {/* Header */}
-      <header className="mb-10 flex flex-col items-center gap-3 xl:mb-14">
+      <motion.header
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="mb-10 flex flex-col items-center gap-3 xl:mb-14"
+      >
         <div className="flex items-center gap-3">
           <Anchor className="h-8 w-8 text-primary xl:h-10 xl:w-10" />
           <h1 className="font-display text-3xl font-black tracking-widest text-gradient-gold xl:text-5xl">
@@ -28,7 +34,7 @@ const Index = () => {
         <p className="font-body text-sm text-muted-foreground xl:text-base">
           Ahoy, Mateys! Selecione uma categoria. Pressione <kbd className="rounded border border-border bg-secondary px-1.5 py-0.5 font-display text-xs text-foreground">F</kbd> para favoritar.
         </p>
-      </header>
+      </motion.header>
 
       {/* Favorites Section */}
       {favCategories.length > 0 && (

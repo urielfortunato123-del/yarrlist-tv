@@ -1,4 +1,5 @@
 import { useRef, useCallback, useState } from "react";
+import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import type { Category } from "@/data/categories";
 
@@ -45,7 +46,7 @@ const CategoryCard = ({ category, index, isFavorite, onToggleFavorite }: Categor
   };
 
   return (
-    <a
+    <motion.a
       ref={ref}
       href={category.url}
       target="_blank"
@@ -55,10 +56,12 @@ const CategoryCard = ({ category, index, isFavorite, onToggleFavorite }: Categor
       onKeyDown={handleKeyDown}
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
-      className="group relative flex flex-col items-center justify-center gap-4 rounded-lg border-2 bg-card p-6 transition-all duration-300 ease-out focus:outline-none xl:p-8"
+      initial={{ opacity: 0, y: 30, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.5, delay: index * 0.07, ease: [0.25, 0.46, 0.45, 0.94] }}
+      whileHover={{ scale: 1.05 }}
+      className="group relative flex flex-col items-center justify-center gap-4 rounded-lg border-2 bg-card p-6 transition-[border-color,box-shadow] duration-300 ease-out focus:outline-none xl:p-8"
       style={{
-        animationDelay: `${index * 80}ms`,
-        animationFillMode: "both",
         borderColor: focused ? `hsl(${category.color})` : undefined,
         boxShadow: focused
           ? `0 0 30px hsl(${category.color} / 0.4), 0 0 60px hsl(${category.color} / 0.15), inset 0 0 20px hsl(${category.color} / 0.05)`
@@ -120,7 +123,7 @@ const CategoryCard = ({ category, index, isFavorite, onToggleFavorite }: Categor
           style={{ backgroundColor: `hsl(${category.color})` }}
         />
       )}
-    </a>
+    </motion.a>
   );
 };
 
