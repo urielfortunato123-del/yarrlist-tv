@@ -1,15 +1,23 @@
+import { useState, useMemo } from "react";
 import { categories } from "@/data/categories";
 import CategoryCard from "@/components/CategoryCard";
 import TvClock from "@/components/TvClock";
 import { useFavorites } from "@/hooks/useFavorites";
 import { motion } from "framer-motion";
-import { Anchor, Star } from "lucide-react";
+import { Anchor, Star, Search } from "lucide-react";
 
 const Index = () => {
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
+  const [search, setSearch] = useState("");
 
-  const favCategories = categories.filter((c) => favorites.includes(c.id));
-  const otherCategories = categories.filter((c) => !favorites.includes(c.id));
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return categories;
+    return categories.filter((c) => c.name.toLowerCase().includes(q));
+  }, [search]);
+
+  const favCategories = filtered.filter((c) => favorites.includes(c.id));
+  const otherCategories = filtered.filter((c) => !favorites.includes(c.id));
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-background px-6 py-10 xl:py-16">
@@ -36,6 +44,24 @@ const Index = () => {
         </p>
       </motion.header>
 
+      {/* Search */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="w-full max-w-md mb-8"
+      >
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value.slice(0, 50))}
+            placeholder="Buscar categoria..."
+            className="w-full rounded-lg border-2 border-border bg-card py-3 pl-12 pr-4 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none transition-colors duration-200 focus:border-primary"
+          />
+        </div>
+      </motion.div>
       {/* Favorites Section */}
       {favCategories.length > 0 && (
         <section className="w-full max-w-5xl mb-8">
