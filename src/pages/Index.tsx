@@ -1,10 +1,16 @@
 import { categories } from "@/data/categories";
 import CategoryCard from "@/components/CategoryCard";
+import TvClock from "@/components/TvClock";
 import { Anchor } from "lucide-react";
 
 const Index = () => {
   return (
     <div className="flex min-h-screen flex-col items-center bg-background px-6 py-10 xl:py-16">
+      {/* Clock */}
+      <div className="mb-8 w-full max-w-5xl flex justify-end">
+        <TvClock />
+      </div>
+
       {/* Header */}
       <header className="mb-10 flex flex-col items-center gap-3 xl:mb-14">
         <div className="flex items-center gap-3">
