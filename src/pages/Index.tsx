@@ -75,7 +75,7 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="mt-12 text-center text-xs text-muted-foreground xl:mt-16">
-        Powered by yarrlist.net
+        Desenvolvido por Uriel da Fonseca Fortunato
       </footer>
     </div>
   );
