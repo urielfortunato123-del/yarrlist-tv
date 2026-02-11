@@ -1,9 +1,15 @@
 import { categories } from "@/data/categories";
 import CategoryCard from "@/components/CategoryCard";
 import TvClock from "@/components/TvClock";
-import { Anchor } from "lucide-react";
+import { useFavorites } from "@/hooks/useFavorites";
+import { Anchor, Star } from "lucide-react";
 
 const Index = () => {
+  const { favorites, toggleFavorite, isFavorite } = useFavorites();
+
+  const favCategories = categories.filter((c) => favorites.includes(c.id));
+  const otherCategories = categories.filter((c) => !favorites.includes(c.id));
+
   return (
     <div className="flex min-h-screen flex-col items-center bg-background px-6 py-10 xl:py-16">
       {/* Clock */}
@@ -20,16 +26,52 @@ const Index = () => {
           </h1>
         </div>
         <p className="font-body text-sm text-muted-foreground xl:text-base">
-          Ahoy, Mateys! Selecione uma categoria.
+          Ahoy, Mateys! Selecione uma categoria. Pressione <kbd className="rounded border border-border bg-secondary px-1.5 py-0.5 font-display text-xs text-foreground">F</kbd> para favoritar.
         </p>
       </header>
 
-      {/* Grid */}
-      <main className="grid w-full max-w-5xl grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4 xl:gap-6">
-        {categories.map((cat, i) => (
-          <CategoryCard key={cat.id} category={cat} index={i} />
-        ))}
-      </main>
+      {/* Favorites Section */}
+      {favCategories.length > 0 && (
+        <section className="w-full max-w-5xl mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <Star className="h-5 w-5 text-primary" style={{ fill: "hsl(var(--primary))" }} />
+            <h2 className="font-display text-lg font-bold tracking-wider text-foreground xl:text-xl">
+              Favoritos
+            </h2>
+          </div>
+          <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4 xl:gap-6">
+            {favCategories.map((cat, i) => (
+              <CategoryCard
+                key={cat.id}
+                category={cat}
+                index={i}
+                isFavorite
+                onToggleFavorite={toggleFavorite}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* All Categories */}
+      <section className="w-full max-w-5xl">
+        {favCategories.length > 0 && (
+          <h2 className="font-display text-lg font-bold tracking-wider text-muted-foreground mb-4 xl:text-xl">
+            Todas as categorias
+          </h2>
+        )}
+        <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4 xl:gap-6">
+          {otherCategories.map((cat, i) => (
+            <CategoryCard
+              key={cat.id}
+              category={cat}
+              index={i}
+              isFavorite={false}
+              onToggleFavorite={toggleFavorite}
+            />
+          ))}
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="mt-12 text-center text-xs text-muted-foreground xl:mt-16">

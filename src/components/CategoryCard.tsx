@@ -1,17 +1,27 @@
 import { useRef, useCallback, useState } from "react";
+import { Star } from "lucide-react";
 import type { Category } from "@/data/categories";
 
 interface CategoryCardProps {
   category: Category;
   index: number;
+  isFavorite: boolean;
+  onToggleFavorite: (id: string) => void;
 }
 
-const CategoryCard = ({ category, index }: CategoryCardProps) => {
+const CategoryCard = ({ category, index, isFavorite, onToggleFavorite }: CategoryCardProps) => {
   const ref = useRef<HTMLAnchorElement>(null);
   const [focused, setFocused] = useState(false);
   const Icon = category.icon;
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    // Toggle favorite with "f" key
+    if (e.key === "f" || e.key === "F") {
+      e.preventDefault();
+      onToggleFavorite(category.id);
+      return;
+    }
+
     const cards = document.querySelectorAll<HTMLElement>("[data-tv-card]");
     const currentIndex = Array.from(cards).indexOf(ref.current!);
     const cols = window.innerWidth >= 1280 ? 4 : window.innerWidth >= 768 ? 3 : 2;
@@ -26,7 +36,13 @@ const CategoryCard = ({ category, index }: CategoryCardProps) => {
       e.preventDefault();
       cards[nextIndex]?.focus();
     }
-  }, []);
+  }, [category.id, onToggleFavorite]);
+
+  const handleFavClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onToggleFavorite(category.id);
+  };
 
   return (
     <a
@@ -50,13 +66,28 @@ const CategoryCard = ({ category, index }: CategoryCardProps) => {
         transform: focused ? "scale(1.1)" : undefined,
       }}
     >
-      {/* Animated glow ring on focus */}
+      {/* Favorite button */}
+      <button
+        onClick={handleFavClick}
+        className="absolute top-3 right-3 z-10 rounded-full p-1.5 transition-all duration-200 hover:scale-125 focus:outline-none"
+        tabIndex={-1}
+        aria-label={isFavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+      >
+        <Star
+          className="h-5 w-5 transition-all duration-200"
+          style={{
+            color: isFavorite ? `hsl(${category.color})` : "hsl(var(--muted-foreground))",
+            fill: isFavorite ? `hsl(${category.color})` : "none",
+            filter: isFavorite ? `drop-shadow(0 0 4px hsl(${category.color} / 0.5))` : undefined,
+          }}
+        />
+      </button>
+
+      {/* Glow ring */}
       {focused && (
         <div
           className="pointer-events-none absolute inset-0 rounded-lg animate-pulse-glow"
-          style={{
-            border: `2px solid hsl(${category.color} / 0.5)`,
-          }}
+          style={{ border: `2px solid hsl(${category.color} / 0.5)` }}
         />
       )}
 
@@ -78,14 +109,11 @@ const CategoryCard = ({ category, index }: CategoryCardProps) => {
       </div>
       <span
         className="font-display text-sm font-bold tracking-wider xl:text-base transition-colors duration-300"
-        style={{
-          color: focused ? `hsl(${category.color})` : undefined,
-        }}
+        style={{ color: focused ? `hsl(${category.color})` : undefined }}
       >
         {category.name}
       </span>
 
-      {/* Selection indicator arrow */}
       {focused && (
         <div
           className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-1 w-10 rounded-full"
