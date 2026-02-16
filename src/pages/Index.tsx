@@ -3,12 +3,17 @@ import { categories } from "@/data/categories";
 import CategoryCard from "@/components/CategoryCard";
 import TvClock from "@/components/TvClock";
 import { useFavorites } from "@/hooks/useFavorites";
+import { useVisitCounter } from "@/hooks/useVisitCounter";
 import { motion } from "framer-motion";
-import { Anchor, Star, Search } from "lucide-react";
+import { Anchor, Star, Search, Heart, Users, X } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import pixQrCode from "@/assets/pix-qrcode-placeholder.png";
 
 const Index = () => {
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
   const [search, setSearch] = useState("");
+  const [donateOpen, setDonateOpen] = useState(false);
+  const visitCount = useVisitCounter();
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -106,9 +111,53 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="mt-12 text-center text-xs text-muted-foreground xl:mt-16">
-        Desenvolvido por Uriel da Fonseca Fortunato
+      <footer className="mt-12 flex flex-col items-center gap-3 text-center xl:mt-16">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Users className="h-4 w-4" />
+          <span>{visitCount.toLocaleString("pt-BR")} acessos</span>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Desenvolvido por Uriel da Fonseca Fortunato
+        </p>
+        <button
+          onClick={() => setDonateOpen(true)}
+          className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-4 py-2 font-display text-xs font-bold tracking-wider text-primary transition-all duration-200 hover:border-primary hover:shadow-[var(--shadow-glow)]"
+        >
+          <Heart className="h-4 w-4" style={{ fill: "hsl(var(--primary))" }} />
+          Ajude o Desenvolvedor
+        </button>
       </footer>
+
+      {/* Donate Dialog */}
+      <Dialog open={donateOpen} onOpenChange={setDonateOpen}>
+        <DialogContent className="border-border bg-card sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 font-display text-lg tracking-wider text-primary">
+              <Heart className="h-5 w-5" style={{ fill: "hsl(var(--primary))" }} />
+              Ajude o Desenvolvedor
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground">
+              Se o YarrList TV te ajuda, considere fazer uma contribuição via PIX para manter o programa funcionando! ⚓
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col items-center gap-4 py-4">
+            <div className="rounded-xl border-2 border-border bg-white p-3">
+              <img
+                src={pixQrCode}
+                alt="QR Code PIX"
+                className="h-48 w-48 object-contain"
+              />
+            </div>
+            <p className="text-center font-body text-sm text-muted-foreground">
+              Escaneie o QR Code acima com seu app de banco para contribuir via PIX.
+            </p>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Users className="h-4 w-4" />
+              <span>Já são <strong className="text-primary">{visitCount.toLocaleString("pt-BR")}</strong> acessos!</span>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
