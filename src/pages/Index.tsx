@@ -5,9 +5,50 @@ import TvClock from "@/components/TvClock";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useVisitCounter } from "@/hooks/useVisitCounter";
 import { motion } from "framer-motion";
-import { Anchor, Star, Search, Heart, Users, X } from "lucide-react";
+import { Anchor, Star, Search, Heart, Users, Copy, Check } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import pixQrCode from "@/assets/pix-qrcode-placeholder.png";
+import pixQrCode from "@/assets/pix-qrcode.png";
+
+const PIX_CODE = "00020126360014BR.GOV.BCB.PIX0114+5514976006620520400005303986540520.005802BR5901N6001C62130509AJUDEODEV6304BE1A";
+
+const PixDonateContent = ({ visitCount }: { visitCount: number }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(PIX_CODE);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-4 py-4">
+      <div className="rounded-xl border-2 border-border bg-white p-3">
+        <img src={pixQrCode} alt="QR Code PIX" className="h-48 w-48 object-contain" />
+      </div>
+      <p className="text-center font-body text-sm text-muted-foreground">
+        Escaneie o QR Code acima com seu app de banco para contribuir via PIX.
+      </p>
+      <div className="w-full">
+        <p className="mb-1 text-center font-body text-xs font-semibold text-muted-foreground">Pix Copia-e-cola:</p>
+        <div className="flex items-center gap-2 rounded-lg border border-border bg-secondary p-2">
+          <p className="flex-1 break-all text-center font-mono text-[10px] text-foreground">{PIX_CODE}</p>
+          <button
+            onClick={handleCopy}
+            className="shrink-0 rounded-md border border-border bg-card p-1.5 text-muted-foreground transition-colors hover:text-primary"
+            title="Copiar código PIX"
+          >
+            {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+          </button>
+        </div>
+        {copied && <p className="mt-1 text-center text-xs text-green-500">Copiado!</p>}
+      </div>
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        <Users className="h-4 w-4" />
+        <span>Já são <strong className="text-primary">{visitCount.toLocaleString("pt-BR")}</strong> acessos!</span>
+      </div>
+    </div>
+  );
+};
 
 const Index = () => {
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
@@ -140,22 +181,8 @@ const Index = () => {
               Se o YarrList TV te ajuda, considere fazer uma contribuição via PIX para manter o programa funcionando! ⚓
             </DialogDescription>
           </DialogHeader>
-          <div className="flex flex-col items-center gap-4 py-4">
-            <div className="rounded-xl border-2 border-border bg-white p-3">
-              <img
-                src={pixQrCode}
-                alt="QR Code PIX"
-                className="h-48 w-48 object-contain"
-              />
-            </div>
-            <p className="text-center font-body text-sm text-muted-foreground">
-              Escaneie o QR Code acima com seu app de banco para contribuir via PIX.
-            </p>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Users className="h-4 w-4" />
-              <span>Já são <strong className="text-primary">{visitCount.toLocaleString("pt-BR")}</strong> acessos!</span>
-            </div>
-          </div>
+          <PixDonateContent visitCount={visitCount} />
+
         </DialogContent>
       </Dialog>
     </div>
