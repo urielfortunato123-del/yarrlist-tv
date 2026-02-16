@@ -1,30 +1,32 @@
 import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
-const STORAGE_KEY = "yarrlist-visit-count";
-const BASE_COUNT = 1247; // base offset
+const SESSION_KEY = "yarrlist-session-counted";
 
 export function useVisitCounter() {
-  const [count, setCount] = useState<number>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const data = JSON.parse(stored);
-        return data.count;
-      }
-      return BASE_COUNT;
-    } catch {
-      return BASE_COUNT;
-    }
-  });
+  const [count, setCount] = useState<number>(0);
 
   useEffect(() => {
-    // Increment on first visit of this session
-    const sessionKey = "yarrlist-session-counted";
-    if (!sessionStorage.getItem(sessionKey)) {
-      sessionStorage.setItem(sessionKey, "1");
-      const newCount = count + 1;
-      setCount(newCount);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ count: newCount }));
+    const counted = sessionStorage.getItem(SESSION_KEY);
+
+    if (!counted) {
+      // First visit this session: increment and get new count
+      sessionStorage.setItem(SESSION_KEY, "1");
+      supabase.rpc("increment_visit_count").then(({ data, error }) => {
+        if (!error && data) {
+          setCount(Number(data));
+        }
+      });
+    } else {
+      // Already counted this session: just read current count
+      supabase
+        .from("visit_counter")
+        .select("count")
+        .eq("id", 1)
+        .single()
+        .then(({ data }) => {
+          if (data) setCount(Number(data.count));
+        });
     }
   }, []);
 
