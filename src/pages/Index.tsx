@@ -53,7 +53,7 @@ const PixDonateContent = ({ visitCount }: { visitCount: number }) => {
 const Index = () => {
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
   const [search, setSearch] = useState("");
-  const [donateOpen, setDonateOpen] = useState(false);
+  const [donateOpen, setDonateOpen] = useState(true);
   const visitCount = useVisitCounter();
 
   const filtered = useMemo(() => {
