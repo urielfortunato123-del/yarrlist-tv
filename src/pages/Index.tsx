@@ -169,6 +169,28 @@ const Index = () => {
           <Users className="h-4 w-4" />
           <span>{visitCount.toLocaleString("pt-BR")} acessos</span>
         </div>
+
+        <div className="flex items-center gap-3">
+          {canInstall && (
+            <button
+              onClick={install}
+              className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-4 py-2 font-display text-xs font-bold tracking-wider text-primary transition-all duration-200 hover:border-primary hover:shadow-[var(--shadow-glow)]"
+            >
+              <Download className="h-4 w-4" />
+              Instalar App
+            </button>
+          )}
+          {canShare && (
+            <button
+              onClick={share}
+              className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-4 py-2 font-display text-xs font-bold tracking-wider text-primary transition-all duration-200 hover:border-primary hover:shadow-[var(--shadow-glow)]"
+            >
+              <Share2 className="h-4 w-4" />
+              Compartilhar
+            </button>
+          )}
+        </div>
+
         <p className="text-xs text-muted-foreground">
           Desenvolvido por Uriel da Fonseca Fortunato
         </p>
