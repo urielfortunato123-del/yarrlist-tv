@@ -231,7 +231,7 @@ const Index = () => {
         </DialogContent>
       </Dialog>
 
-      <ChangelogDialog />
+      <ChangelogDialog externalOpen={changelogOpen} onExternalClose={() => setChangelogOpen(false)} />
     </div>
   );
 };
