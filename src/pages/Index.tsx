@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { Anchor, Star, Search, Heart, Users, Copy, Check, Download, Share2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import pixQrCode from "@/assets/pix-qrcode.png";
+import { ChangelogDialog } from "@/components/ChangelogDialog";
 
 const PIX_CODE = "00020126330014BR.GOV.BCB.PIX01113638483487152040000530398654041.005802BR5901N6001C62140510YARRLISTTV63045AC";
 
