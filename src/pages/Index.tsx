@@ -4,8 +4,9 @@ import CategoryCard from "@/components/CategoryCard";
 import TvClock from "@/components/TvClock";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useVisitCounter } from "@/hooks/useVisitCounter";
+import { usePwaInstall, useShareApp } from "@/hooks/usePwaInstall";
 import { motion } from "framer-motion";
-import { Anchor, Star, Search, Heart, Users, Copy, Check } from "lucide-react";
+import { Anchor, Star, Search, Heart, Users, Copy, Check, Download, Share2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import pixQrCode from "@/assets/pix-qrcode.png";
 
@@ -55,6 +56,8 @@ const Index = () => {
   const [search, setSearch] = useState("");
   const [donateOpen, setDonateOpen] = useState(true);
   const visitCount = useVisitCounter();
+  const { canInstall, install } = usePwaInstall();
+  const { canShare, share } = useShareApp();
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -166,6 +169,28 @@ const Index = () => {
           <Users className="h-4 w-4" />
           <span>{visitCount.toLocaleString("pt-BR")} acessos</span>
         </div>
+
+        <div className="flex items-center gap-3">
+          {canInstall && (
+            <button
+              onClick={install}
+              className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-4 py-2 font-display text-xs font-bold tracking-wider text-primary transition-all duration-200 hover:border-primary hover:shadow-[var(--shadow-glow)]"
+            >
+              <Download className="h-4 w-4" />
+              Instalar App
+            </button>
+          )}
+          {canShare && (
+            <button
+              onClick={share}
+              className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-4 py-2 font-display text-xs font-bold tracking-wider text-primary transition-all duration-200 hover:border-primary hover:shadow-[var(--shadow-glow)]"
+            >
+              <Share2 className="h-4 w-4" />
+              Compartilhar
+            </button>
+          )}
+        </div>
+
         <p className="text-xs text-muted-foreground">
           Desenvolvido por Uriel da Fonseca Fortunato
         </p>
