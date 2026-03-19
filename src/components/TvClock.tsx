@@ -9,28 +9,16 @@ const TvClock = () => {
   }, []);
 
   const time = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-  const seconds = now.toLocaleTimeString("pt-BR", { second: "2-digit" }).slice(-2);
   const date = now.toLocaleDateString("pt-BR", {
-    weekday: "long",
+    weekday: "short",
     day: "numeric",
-    month: "long",
-    year: "numeric",
+    month: "short",
   });
 
   return (
-    <div className="flex items-center gap-4">
-      <div className="flex items-baseline gap-1">
-        <span className="font-display text-3xl font-bold tracking-wider text-foreground xl:text-4xl">
-          {time}
-        </span>
-        <span className="font-display text-lg text-muted-foreground xl:text-xl">
-          :{seconds}
-        </span>
-      </div>
-      <div className="h-8 w-px bg-border" />
-      <span className="font-body text-sm capitalize text-muted-foreground xl:text-base">
-        {date}
-      </span>
+    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+      <span className="font-display font-semibold text-foreground">{time}</span>
+      <span className="hidden capitalize sm:inline">· {date}</span>
     </div>
   );
 };
