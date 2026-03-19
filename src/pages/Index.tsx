@@ -6,7 +6,7 @@ import { useFavorites } from "@/hooks/useFavorites";
 import { useVisitCounter } from "@/hooks/useVisitCounter";
 import { usePwaInstall, useShareApp } from "@/hooks/usePwaInstall";
 import { motion } from "framer-motion";
-import { Anchor, Star, Search, Heart, Users, Copy, Check, Download, Share2 } from "lucide-react";
+import { Anchor, Star, Search, Heart, Users, Copy, Check, Download, Share2, RefreshCw } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import pixQrCode from "@/assets/pix-qrcode.png";
 import { ChangelogDialog } from "@/components/ChangelogDialog";
