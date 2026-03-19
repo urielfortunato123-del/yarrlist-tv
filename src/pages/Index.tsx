@@ -212,7 +212,7 @@ const Index = () => {
               Ajude o Desenvolvedor
             </DialogTitle>
             <DialogDescription className="text-muted-foreground">
-              Ajude a manter o YarrList TV funcionando! Com apenas R$1 você já faz a diferença. Contribua via PIX! ⚓
+              Ajude a manter o Âncora TV funcionando! Com apenas R$1 você já faz a diferença. Contribua via PIX! ⚓
             </DialogDescription>
           </DialogHeader>
           <PixDonateContent visitCount={visitCount} />
