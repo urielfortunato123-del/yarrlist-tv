@@ -6,7 +6,7 @@ import { useFavorites } from "@/hooks/useFavorites";
 import { useVisitCounter } from "@/hooks/useVisitCounter";
 import { usePwaInstall, useShareApp } from "@/hooks/usePwaInstall";
 import { motion } from "framer-motion";
-import { Anchor, Star, Search, Heart, Users, Copy, Check, Download, Share2 } from "lucide-react";
+import { Anchor, Star, Search, Heart, Users, Copy, Check, Download, Share2, RefreshCw } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import pixQrCode from "@/assets/pix-qrcode.png";
 import { ChangelogDialog } from "@/components/ChangelogDialog";
@@ -59,6 +59,7 @@ const Index = () => {
   const visitCount = useVisitCounter();
   const { canInstall, install } = usePwaInstall();
   const { canShare, share } = useShareApp();
+  const [changelogOpen, setChangelogOpen] = useState(false);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -71,14 +72,23 @@ const Index = () => {
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-background px-6 py-10 xl:py-16">
-      {/* Donate Banner */}
-      <button
-        onClick={() => setDonateOpen(true)}
-        className="mb-6 flex w-full max-w-5xl items-center justify-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-4 py-3 font-display text-sm font-bold tracking-wider text-primary transition-all duration-200 hover:bg-primary/20 hover:shadow-[var(--shadow-glow)]"
-      >
-        <Heart className="h-5 w-5" style={{ fill: "hsl(var(--primary))" }} />
-        Ajude a manter o app — Contribua com R$1 ⚓
-      </button>
+      {/* Top Buttons */}
+      <div className="mb-6 flex w-full max-w-5xl flex-col gap-3 sm:flex-row">
+        <button
+          onClick={() => setDonateOpen(true)}
+          className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-4 py-3 font-display text-sm font-bold tracking-wider text-primary transition-all duration-200 hover:bg-primary/20 hover:shadow-[var(--shadow-glow)]"
+        >
+          <Heart className="h-5 w-5" style={{ fill: "hsl(var(--primary))" }} />
+          Ajude a manter o app — R$1 ⚓
+        </button>
+        <button
+          onClick={() => setChangelogOpen(true)}
+          className="flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-3 font-display text-sm font-bold tracking-wider text-primary transition-all duration-200 hover:border-primary hover:shadow-[var(--shadow-glow)]"
+        >
+          <RefreshCw className="h-5 w-5" />
+          Ver Novidades
+        </button>
+      </div>
 
       {/* Clock */}
       <div className="mb-8 w-full max-w-5xl flex justify-end">
@@ -221,7 +231,7 @@ const Index = () => {
         </DialogContent>
       </Dialog>
 
-      <ChangelogDialog />
+      <ChangelogDialog externalOpen={changelogOpen} onExternalClose={() => setChangelogOpen(false)} />
     </div>
   );
 };

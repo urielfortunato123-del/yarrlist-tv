@@ -5,15 +5,18 @@ import { Download, Share2, Sparkles } from "lucide-react";
 const CHANGELOG_VERSION = "1.1.0";
 const STORAGE_KEY = "ancora-changelog-seen";
 
-export function ChangelogDialog() {
+export function ChangelogDialog({ externalOpen, onExternalClose }: { externalOpen?: boolean; onExternalClose?: () => void }) {
   const seen = localStorage.getItem(STORAGE_KEY);
-  const [open, setOpen] = useState(seen !== CHANGELOG_VERSION);
+  const [internalOpen, setInternalOpen] = useState(seen !== CHANGELOG_VERSION);
+  
+  const open = externalOpen || internalOpen;
 
   const handleClose = (value: boolean) => {
     if (!value) {
       localStorage.setItem(STORAGE_KEY, CHANGELOG_VERSION);
+      onExternalClose?.();
     }
-    setOpen(value);
+    setInternalOpen(value);
   };
 
   return (
