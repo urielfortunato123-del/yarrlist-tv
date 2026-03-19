@@ -220,6 +220,8 @@ const Index = () => {
 
         </DialogContent>
       </Dialog>
+
+      <ChangelogDialog />
     </div>
   );
 };
